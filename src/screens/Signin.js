@@ -10,38 +10,25 @@ import {
   StatusBar,
 } from 'react-native';
 import {useDeviceOrientation} from '@react-native-community/hooks';
+import {SigninUsers} from '../store/action/UserAction';
+import {useDispatch, useSelector} from 'react-redux';
 
 const Signin = (props) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [fieldError, setFieldError] = useState();
 
+  const dispatch = useDispatch();
+
+  const RegisterReducer = useSelector((state) => state.RegisterReducer);
+  const {loading, error} = RegisterReducer;
+
   const signin = () => {
-    if (!email || !password) {
-      if (!email) {
-        setFieldError('Email is required');
-      } else if (!password) {
-        setFieldError('Password is required');
-      } else {
-        setFieldError('Email and Password is required');
-      }
-      setTimeout(() => setFieldError(), 4000);
-    } else {
-      fetch('http://192.168.10.113:4000/api/users/signin', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-        .catch((err) => setFieldError(err));
-      props.navigation.navigate('Home');
+    dispatch(SigninUsers(email, password));
+    if (error) {
+      setFieldError(error);
     }
+    setTimeout(setFieldError, 3000);
   };
 
   return (
@@ -49,6 +36,7 @@ const Signin = (props) => {
       <StatusBar backgroundColor="red" />
       {useDeviceOrientation().portrait ? (
         <SafeAreaView style={Styles.container}>
+          {loading ? <Text style={{color: '#fff'}}>loading....</Text> : null}
           <View>
             <Text style={Styles.signinHeading}>SignIn in Blood Bank</Text>
             <View>
@@ -87,6 +75,7 @@ const Signin = (props) => {
       ) : (
         <ScrollView>
           <SafeAreaView style={Styles.container}>
+            {loading ? <Text style={{color: '#fff'}}>loading....</Text> : null}
             <View>
               <Text style={Styles.signinHeading}>SignIn in Blood Bank</Text>
               <Text>{fieldError}</Text>
@@ -106,9 +95,9 @@ const Signin = (props) => {
                   style={Styles.signInTextinput}
                   onChangeText={(e) => setPassword(e)}
                 />
-                <Text style={fieldError && Styles.ErrorStyle}>
-                  {fieldError}
-                </Text>
+                {fieldError ? (
+                  <Text style={Styles.ErrorStyle}>{fieldError}</Text>
+                ) : null}
                 <TouchableOpacity activeOpacity={0.6} onPress={signin}>
                   <Text style={Styles.signInButton}>Sign In</Text>
                 </TouchableOpacity>
@@ -135,6 +124,7 @@ const Styles = StyleSheet.create({
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 50,
   },
   signinHeading: {
     fontSize: 20,

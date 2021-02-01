@@ -11,7 +11,7 @@ import {
   FlatList,
 } from 'react-native';
 
-const NearByBloodBanks = () => {
+const NearByBloodBanks = (props) => {
   const BloodBanks = [
     {
       id: '1',
@@ -46,10 +46,15 @@ const NearByBloodBanks = () => {
           data={BloodBanks}
           renderItem={({item}) => {
             return (
-              <View key={item.id} style={Styles.banksItems}>
-                <Text style={Styles.bankNameText}>{item.bank}</Text>
-                <Text style={Styles.bankNameLocation}>{item.location}</Text>
-              </View>
+              <TouchableOpacity
+                key={item.id}
+                activeOpacity={0.6}
+                onPress={() => props.navigation.navigate(`BloodBanks${item.id}`)}>
+                <View style={Styles.banksItems}>
+                  <Text style={Styles.bankNameText}>{item.bank}</Text>
+                  <Text style={Styles.bankNameLocation}>{item.location}</Text>
+                </View>
+              </TouchableOpacity>
             );
           }}
         />

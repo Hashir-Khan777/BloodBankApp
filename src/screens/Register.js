@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,8 @@ import {
   StatusBar,
 } from 'react-native';
 import {useDeviceOrientation} from '@react-native-community/hooks';
+import {useDispatch, useSelector} from 'react-redux';
+import {RegisterUsers} from '../store/action/UserAction';
 
 const Register = (props) => {
   const [name, setName] = useState();
@@ -18,35 +20,17 @@ const Register = (props) => {
   const [password, setPassword] = useState();
   const [fieldError, setFieldError] = useState();
 
+  const dispatch = useDispatch();
+
+  const RegisterReducer = useSelector((state) => state.RegisterReducer);
+  const {loading, error} = RegisterReducer;
+
   const registered = () => {
-    if (!name || !number || !email || !password) {
-      if (!name) {
-        setFieldError('Name is required');
-      } else if (!number) {
-        setFieldError('Number is required');
-      } else if (!email) {
-        setFieldError('Email is required');
-      } else if (!password) {
-        setFieldError('Password is required');
-      } else {
-        setFieldError('Name, Number, Email and Password is required');
-      }
-      setTimeout(() => setFieldError(), 4000);
-    } else {
-      fetch('http://192.168.10.113:4000/api/users/register', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: name,
-          number: number,
-          email: email,
-          password: password,
-        }),
-      });
-      props.navigation.navigate('Home');
+    dispatch(RegisterUsers(name, number, email, password));
+    if (error) {
+      setFieldError(error);
     }
+    setTimeout(setFieldError, 3000);
   };
 
   return (
@@ -54,6 +38,7 @@ const Register = (props) => {
       <StatusBar backgroundColor="red" />
       {useDeviceOrientation().portrait ? (
         <SafeAreaView style={Styles.container}>
+          {loading ? <Text style={{color: '#fff'}}>loading....</Text> : null}
           <View>
             <Text style={Styles.signinHeading}>Register in Blood Bank</Text>
             <View>
@@ -90,7 +75,9 @@ const Register = (props) => {
                 value={password}
                 onChangeText={(e) => setPassword(e)}
               />
-              <Text style={fieldError && Styles.ErrorStyle}>{fieldError}</Text>
+              {fieldError ? (
+                <Text style={Styles.ErrorStyle}>{fieldError}</Text>
+              ) : null}
               <TouchableOpacity activeOpacity={0.6} onPress={registered}>
                 <Text style={Styles.signInButton}>Register</Text>
               </TouchableOpacity>
@@ -110,6 +97,7 @@ const Register = (props) => {
       ) : (
         <ScrollView>
           <SafeAreaView style={Styles.container}>
+            {loading ? <Text style={{color: '#fff'}}>loading....</Text> : null}
             <View>
               <Text style={Styles.signinHeading}>Register in Blood Bank</Text>
               <View>
@@ -146,9 +134,9 @@ const Register = (props) => {
                   value={password}
                   onChangeText={(e) => setPassword(e)}
                 />
-                <Text style={fieldError && Styles.ErrorStyle}>
-                  {fieldError}
-                </Text>
+                {fieldError ? (
+                  <Text style={Styles.ErrorStyle}>{fieldError}</Text>
+                ) : null}
                 <TouchableOpacity activeOpacity={0.6} onPress={registered}>
                   <Text style={Styles.signInButton}>Register</Text>
                 </TouchableOpacity>
@@ -178,6 +166,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    paddingHorizontal: 50,
   },
   signinHeading: {
     fontSize: 20,
@@ -221,6 +210,7 @@ const Styles = StyleSheet.create({
   ErrorStyle: {
     color: '#fff',
     marginBottom: 10,
+    // width: '40%',
   },
 });
 

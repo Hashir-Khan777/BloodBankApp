@@ -4,11 +4,12 @@ import Signin from '../screens/Signin';
 import Register from '../screens/Register';
 import {TopNavigation} from './TopNavigation';
 import Donate from '../screens/Donate';
+import NearByDonors from '../screens/NearByDonors';
 
 const Stack = createStackNavigator();
 const StackNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName="Register">
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Register"
         component={Register}
@@ -33,6 +34,13 @@ const StackNavigation = () => {
       <Stack.Screen
         name="Donate"
         component={Donate}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={`BloodBanks/:id`}
+        component={NearByDonors}
         options={{
           headerShown: false,
         }}
