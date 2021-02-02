@@ -11,6 +11,8 @@ import {
   Picker,
 } from 'react-native';
 import {useDeviceOrientation} from '@react-native-community/hooks';
+import {useDispatch, useSelector} from 'react-redux';
+import {UsersDonations} from '../store/action/UserAction';
 
 const Donate = (props) => {
   const [age, setAge] = useState();
@@ -21,28 +23,22 @@ const Donate = (props) => {
   const [bloodType, setBloodType] = useState();
   const [fieldError, setFieldError] = useState();
 
+  const DonationReducer = useSelector((state) => state.DonationReducer);
+  const {loading, error} = DonationReducer;
+
+  const dispatch = useDispatch();
+
   const Donate = () => {
-    if (!age || !country || !city || !address || !postalCode || !bloodType) {
-      if (!age) {
-        setFieldError('Age is required');
-      } else if (!country) {
-        setFieldError('Country is required');
-      } else if (!city) {
-        setFieldError('City is required');
-      } else if (!address) {
-        setFieldError('Address is required');
-      } else if (!postalCode) {
-        setFieldError('Postal Code is required');
-      } else if (!bloodType) {
-        setFieldError('Blood Type is required');
-      } else {
-        setFieldError(
-          'Age, Country, City, Address, Postal Code and Blood Type is required',
-        );
-      }
-      setTimeout(() => setFieldError(), 4000);
+    if (error) {
+      setFieldError(error);
+      setTimeout(setFieldError, 3000);
     } else {
-      props.navigation.navigate('Donations');
+      if (!error) {
+        dispatch(
+          UsersDonations(age, country, city, address, postalCode, bloodType),
+        );
+        props.navigation.navigate('Donations');
+      }
     }
   };
 
@@ -51,6 +47,7 @@ const Donate = (props) => {
       <StatusBar backgroundColor="red" />
       {useDeviceOrientation().portrait ? (
         <SafeAreaView style={Styles.container}>
+          {loading ? <Text style={{color: '#fff'}}>loading....</Text> : null}
           <View>
             <Text style={Styles.signinHeading}>Donate Blood</Text>
             <View>
@@ -112,7 +109,9 @@ const Donate = (props) => {
                 <Picker.Item value="O-" label="O-" />
                 <Picker.Item value="AB-" label="AB-" />
               </Picker>
-              <Text style={fieldError && Styles.ErrorStyle}>{fieldError}</Text>
+              {fieldError ? (
+                <Text style={Styles.ErrorStyle}>{fieldError}</Text>
+              ) : null}
               <TouchableOpacity activeOpacity={0.7} onPress={Donate}>
                 <Text style={Styles.signInButton}>Donate</Text>
               </TouchableOpacity>
@@ -122,6 +121,7 @@ const Donate = (props) => {
       ) : (
         <ScrollView>
           <SafeAreaView style={Styles.container}>
+            {loading ? <Text style={{color: '#fff'}}>loading....</Text> : null}
             <View
               style={{
                 paddingVertical: 20,
@@ -186,9 +186,9 @@ const Donate = (props) => {
                   <Picker.Item value="O-" label="O-" />
                   <Picker.Item value="AB-" label="AB-" />
                 </Picker>
-                <Text style={fieldError && Styles.ErrorStyle}>
-                  {fieldError}
-                </Text>
+                {fieldError ? (
+                  <Text style={Styles.ErrorStyle}>{fieldError}</Text>
+                ) : null}
                 <TouchableOpacity activeOpacity={0.7} onPress={Donate}>
                   <Text style={Styles.signInButton}>Donate</Text>
                 </TouchableOpacity>

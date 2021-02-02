@@ -4,29 +4,28 @@ const Schema = mongoose.Schema;
 const DonateSchema = new Schema(
   {
     age: {
-      type: Number,
-      required: ['name is required', true],
+      type: String,
+      required: ['Age is required', true],
     },
     country: {
       type: String,
-      required: ['Mobile Number is required', true],
+      required: ['Country Number is required', true],
     },
     city: {
       type: String,
-      required: ['email is required', true],
-      unique: true,
+      required: ['City is required', true],
     },
     address: {
       type: String,
-      required: ['password is required', true],
+      required: ['Address is required', true],
     },
     postalcode: {
-      type: Number,
-      required: ['password is required', true],
+      type: String,
+      required: ['Postal Code is required', true],
     },
     bloodtype: {
       type: String,
-      required: ['password is required', true],
+      required: ['Blood Type is required', true],
     },
   },
   {

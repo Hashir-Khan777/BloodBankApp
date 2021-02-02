@@ -43,7 +43,9 @@ const SigninUsers = (email, password) => async (dispatch) => {
       },
     );
     dispatch({type: 'USER_SIGNIN_SUCESS', payload: data});
-    await AsyncStorage.setItem('user', JSON.stringify(data));
+    await AsyncStorage.setItem('user', JSON.stringify(data), async () => {
+      await AsyncStorage.mergeItem('user', JSON.stringify(data));
+    });
   } catch (err) {
     dispatch({
       type: 'USER_SIGNIN_FAIL',
@@ -80,7 +82,9 @@ const UsersDonations = (
       },
     );
     dispatch({type: 'USER_DONATION_SUCCESS', payload: data});
-    await AsyncStorage.setItem('donation', JSON.stringify(data));
+    await AsyncStorage.setItem('donation', JSON.stringify(data), async () => {
+      await AsyncStorage.mergeItem('donation', JSON.stringify(data));
+    });
   } catch (err) {
     dispatch({
       type: 'USER_DONATION_FAIL',

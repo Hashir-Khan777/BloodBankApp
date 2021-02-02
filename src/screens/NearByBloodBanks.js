@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import React from 'react';
 import {
   View,
@@ -12,6 +13,10 @@ import {
 } from 'react-native';
 
 const NearByBloodBanks = (props) => {
+  const clear = async () => {
+    await AsyncStorage.clear();
+  };
+  // clear();
   const BloodBanks = [
     {
       id: '1',
@@ -49,7 +54,9 @@ const NearByBloodBanks = (props) => {
               <TouchableOpacity
                 key={item.id}
                 activeOpacity={0.6}
-                onPress={() => props.navigation.navigate(`BloodBanks${item.id}`)}>
+                onPress={() =>
+                  props.navigation.navigate(`BloodBanks${item.id}`)
+                }>
                 <View style={Styles.banksItems}>
                   <Text style={Styles.bankNameText}>{item.bank}</Text>
                   <Text style={Styles.bankNameLocation}>{item.location}</Text>

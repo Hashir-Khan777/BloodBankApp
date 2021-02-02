@@ -7,10 +7,10 @@ const INITIAL_STATE = {
 
 const retrieve = async () => {
   const data = await AsyncStorage.getItem('user');
-  data ? (INITIAL_STATE.registerUsers = data) : null;
+  data !== undefined ? (INITIAL_STATE.registerUsers = data) : null;
 
   const donation = await AsyncStorage.getItem('donation');
-  donation ? (INITIAL_STATE.donation = donation) : null;
+  donation !== undefined ? (INITIAL_STATE.donation = donation) : null;
 };
 
 retrieve();

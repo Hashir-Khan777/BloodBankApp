@@ -23,7 +23,7 @@ const Register = (props) => {
   const dispatch = useDispatch();
 
   const RegisterReducer = useSelector((state) => state.RegisterReducer);
-  const {loading, error} = RegisterReducer;
+  const {registerUsers, loading, error} = RegisterReducer;
 
   const registered = () => {
     dispatch(RegisterUsers(name, number, email, password));
