@@ -1,22 +1,30 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema(
+const DonateSchema = new Schema(
   {
-    name: {
-      type: String,
+    age: {
+      type: Number,
       required: ['name is required', true],
     },
-    number: {
-      type: Number,
+    country: {
+      type: String,
       required: ['Mobile Number is required', true],
     },
-    email: {
+    city: {
       type: String,
       required: ['email is required', true],
       unique: true,
     },
-    password: {
+    address: {
+      type: String,
+      required: ['password is required', true],
+    },
+    postalcode: {
+      type: Number,
+      required: ['password is required', true],
+    },
+    bloodtype: {
       type: String,
       required: ['password is required', true],
     },
@@ -26,6 +34,6 @@ const UserSchema = new Schema(
   },
 );
 
-const User = mongoose.model('User', UserSchema);
+const Donate = mongoose.model('Donations', DonateSchema);
 
-module.exports = User;
+module.exports = Donate;

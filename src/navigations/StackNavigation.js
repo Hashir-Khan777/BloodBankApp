@@ -39,7 +39,7 @@ const StackNavigation = () => {
         }}
       />
       <Stack.Screen
-        name={`BloodBanks/:id`}
+        name="BloodBanks:id"
         component={NearByDonors}
         options={{
           headerShown: false,

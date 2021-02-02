@@ -2,16 +2,18 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const INITIAL_STATE = {
   registerUsers: null,
+  donation: null,
 };
 
 const retrieve = async () => {
   const data = await AsyncStorage.getItem('user');
-  return data;
+  data ? (INITIAL_STATE.registerUsers = data) : null;
+
+  const donation = await AsyncStorage.getItem('donation');
+  donation ? (INITIAL_STATE.donation = donation) : null;
 };
 
-retrieve().then((data) =>
-  data !== undefined ? INITIAL_STATE.registerUsers.push(data) : null,
-);
+retrieve();
 
 const RegisterReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -58,4 +60,25 @@ const SigninReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export {RegisterReducer, SigninReducer};
+const DonationReducer = (state = INITIAL_STATE, action) => {
+  switch (action.type) {
+    case 'USER_DONATION_REQUEST':
+      return {
+        loading: true,
+      };
+    case 'USER_DONATION_SUCCESS':
+      return {
+        loading: false,
+        donation: action.payload,
+      };
+    case 'USER_DONATION_FAIL':
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export {RegisterReducer, SigninReducer, DonationReducer};

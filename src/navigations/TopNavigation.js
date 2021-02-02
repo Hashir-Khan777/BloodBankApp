@@ -10,16 +10,22 @@ const TopNavigation = () => {
     <Tab.Navigator
       initialRouteName="Home"
       tabBarOptions={{
-        tabStyle: {
+        style: {
           backgroundColor: 'red',
         },
+        inactiveTintColor: 'rgba(255,255,255,0.6)',
         activeTintColor: 'rgba(255,255,255,1)',
-        inactiveTintColor: 'rgba(255,255,255,0.7)',
         labelStyle: {
           flex: 1,
           fontSize: 13,
           alignItems: 'center',
           justifyContent: 'center',
+          fontWeight: 'bold',
+        },
+        indicatorStyle: {
+          borderBottomWidth: 2,
+          borderBottomColor: '#fff',
+          borderRadius: 3,
         },
       }}>
       <Tab.Screen name="Blood banks" component={NearByBloodBanks} />

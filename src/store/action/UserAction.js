@@ -55,4 +55,41 @@ const SigninUsers = (email, password) => async (dispatch) => {
   }
 };
 
-export {RegisterUsers, SigninUsers};
+const UsersDonations = (
+  age,
+  country,
+  city,
+  address,
+  postalcode,
+  bloodtype,
+) => async (dispatch) => {
+  dispatch({
+    type: 'USER_DONATION_REQUEST',
+    payload: {age, country, city, address, postalcode, bloodtype},
+  });
+  try {
+    const {data} = await axios.post(
+      'http://192.168.10.113:4000/api/users/donate',
+      {
+        age: age,
+        country: country,
+        city: city,
+        address: address,
+        postalcode: postalcode,
+        bloodtype: bloodtype,
+      },
+    );
+    dispatch({type: 'USER_DONATION_SUCCESS', payload: data});
+    await AsyncStorage.setItem('donation', JSON.stringify(data));
+  } catch (err) {
+    dispatch({
+      type: 'USER_DONATION_FAIL',
+      payload:
+        err.response && err.response.data.message
+          ? err.response.data.message
+          : err.message,
+    });
+  }
+};
+
+export {RegisterUsers, SigninUsers, UsersDonations};
