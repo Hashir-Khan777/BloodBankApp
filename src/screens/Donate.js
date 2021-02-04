@@ -15,6 +15,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {UsersDonations} from '../store/action/UserAction';
 
 const Donate = (props) => {
+  const [name, setName] = useState();
   const [age, setAge] = useState();
   const [country, setCountry] = useState();
   const [city, setCity] = useState();
@@ -35,7 +36,15 @@ const Donate = (props) => {
     } else {
       if (!error) {
         dispatch(
-          UsersDonations(age, country, city, address, postalCode, bloodType),
+          UsersDonations(
+            name,
+            age,
+            country,
+            city,
+            address,
+            postalCode,
+            bloodType,
+          ),
         );
         props.navigation.navigate('Donations');
       }
@@ -51,6 +60,13 @@ const Donate = (props) => {
           <View>
             <Text style={Styles.signinHeading}>Donate Blood</Text>
             <View>
+              <TextInput
+                placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                placeholder="Name"
+                style={Styles.signInTextinput}
+                keyboardType="default"
+                onChangeText={(e) => setName(e)}
+              />
               <TextInput
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
                 placeholder="Age"

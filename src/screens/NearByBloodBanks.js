@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import React from 'react';
 import {
   View,
@@ -13,10 +12,6 @@ import {
 } from 'react-native';
 
 const NearByBloodBanks = (props) => {
-  const clear = async () => {
-    await AsyncStorage.clear();
-  };
-  // clear();
   const BloodBanks = [
     {
       id: '1',

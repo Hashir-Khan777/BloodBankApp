@@ -51,6 +51,7 @@ userRouter.post(
   '/donate',
   expressAsyncHandler(async (req, res) => {
     const donate = new Donate({
+      name: req.body.name,
       age: req.body.age,
       country: req.body.country,
       city: req.body.city,
@@ -61,6 +62,7 @@ userRouter.post(
     const user_donation = await donate.save();
     res.send({
       _id: user_donation._id,
+      name: user_donation.name,
       age: user_donation.age,
       country: user_donation.country,
       city: user_donation.city,

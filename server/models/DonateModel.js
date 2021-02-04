@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const DonateSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: ['Name is required', true],
+    },
     age: {
       type: String,
       required: ['Age is required', true],

@@ -1,35 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  TextInput,
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
   FlatList,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Donations = (props) => {
-  const DonationReducer = useSelector((state) => state.DonationReducer);
-  const {donation} = DonationReducer;
+  const [donationArray, setDonationArray] = useState(null);
 
-  var donationArray = [];
-
-  if (donation) {
-    const donateobj = JSON.parse(donation);
-    donationArray = [...donationArray, donateobj];
-  }
-  console.log(donationArray);
+  useEffect(async () => {
+    await AsyncStorage.clear();
+    const data = await AsyncStorage.getItem('donation');
+    data !== null && setDonationArray([JSON.parse(data)]);
+  }, [AsyncStorage, setDonationArray]);
 
   return (
     <>
       <StatusBar backgroundColor="red" />
-      <SafeAreaView style={Styles.donateView}>
-        {donation ? (
-          <ScrollView>
+      {donationArray ? (
+        <SafeAreaView style={Styles.donateView}>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <View>
               <View style={Styles.donateLivstView}>
                 <View>
@@ -44,19 +40,40 @@ const Donations = (props) => {
                 </View>
               </View>
               <View>
-                {donationArray ? (
+                {donationArray !== null ? (
                   <FlatList
                     data={donationArray}
                     renderItem={({item}) => {
                       return (
-                        <TouchableOpacity key={item._id} activeOpacity={0.6}>
+                        <TouchableOpacity
+                          key={item._id}
+                          activeOpacity={0.6}
+                          style={Styles.banksItems}>
                           <View>
-                            <Text>Age: {item.age}</Text>
-                            <Text>BloodType: {item.bloodtype}</Text>
-                            <Text>Address: {item.address}</Text>
-                            <Text>Country: {item.country}</Text>
-                            <Text>City: {item.city}</Text>
-                            <Text>Postal code: {item.postalcode}</Text>
+                            <View style={Styles.donateSections}>
+                              <Text style={Styles.bankNameText}>
+                                Age: {item.age}
+                              </Text>
+                              <Text style={Styles.bankNameText}>
+                                BloodType: {item.bloodtype}
+                              </Text>
+                            </View>
+                            <View style={Styles.donateSections}>
+                              <Text style={Styles.bankNameText}>
+                                Country: {item.country}
+                              </Text>
+                              <Text style={Styles.bankNameText}>
+                                City: {item.city}
+                              </Text>
+                            </View>
+                            <View style={Styles.donateSections}>
+                              <Text style={Styles.bankNameText}>
+                                Address: {item.address}
+                              </Text>
+                              <Text style={Styles.bankNameText}>
+                                Postal code: {item.postalcode}
+                              </Text>
+                            </View>
                           </View>
                         </TouchableOpacity>
                       );
@@ -66,7 +83,9 @@ const Donations = (props) => {
               </View>
             </View>
           </ScrollView>
-        ) : (
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView style={Styles.donateView}>
           <View style={Styles.donateView}>
             <Text style={Styles.donateTextView}>
               You donot made any donations
@@ -77,45 +96,8 @@ const Donations = (props) => {
               <Text style={Styles.donateButtonText}>Donate</Text>
             </TouchableOpacity>
           </View>
-        )}
-        {/* <View style={Styles.donateView}>
-          {donationArray ? (
-            <Text style={Styles.donateTextView}>
-              Do you want to donate more
-            </Text>
-          ) : (
-            <Text style={Styles.donateTextView}>
-              You donot made any donations
-            </Text>
-          )}
-          <TouchableOpacity
-            activeOpacity={0.4}
-            onPress={() => props.navigation.navigate('Donate')}>
-            <Text style={Styles.donateButtonText}>Donate</Text>
-          </TouchableOpacity>
-        </View>
-        {donationArray ? (
-          <View>
-            <FlatList
-              data={donationArray}
-              renderItem={({item}) => {
-                return (
-                  <TouchableOpacity key={item._id} activeOpacity={0.6}>
-                    <View>
-                      <Text>Age: {item.age}</Text>
-                      <Text>BloodType: {item.bloodtype}</Text>
-                      <Text>Address: {item.address}</Text>
-                      <Text>Country: {item.country}</Text>
-                      <Text>City: {item.city}</Text>
-                      <Text>Postal code: {item.postalcode}</Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
-            />
-          </View>
-        ) : null} */}
-      </SafeAreaView>
+        </SafeAreaView>
+      )}
     </>
   );
 };
@@ -125,6 +107,17 @@ const Styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  banksItems: {
+    marginBottom: 10,
+    marginHorizontal: 10,
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 4,
+  },
+  bankNameText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   donateButtonText: {
     color: 'red',
@@ -142,9 +135,19 @@ const Styles = StyleSheet.create({
   },
   donateLivstView: {
     flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 20,
+    alignContent: 'space-between',
+    marginHorizontal: 30,
     marginVertical: 10,
+  },
+  donateSections: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    alignContent: 'space-between',
+    marginVertical: 2,
   },
 });
 

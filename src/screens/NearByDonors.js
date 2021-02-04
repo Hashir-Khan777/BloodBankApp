@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,38 +10,18 @@ import {
   StatusBar,
   FlatList,
 } from 'react-native';
+import Axios from 'axios';
 
 const NearByDonors = () => {
-  const Donors = [
-    {
-      id: '1',
-      name: 'Hashir',
-      age: 17,
-      location: 'Karachi',
-      bloodType: 'AB+',
-    },
-    {
-      id: '2',
-      name: 'Hashir',
-      age: 17,
-      location: 'Karachi',
-      bloodType: 'AB+',
-    },
-    {
-      id: '3',
-      name: 'Hashir',
-      age: 17,
-      location: 'Karachi',
-      bloodType: 'AB+',
-    },
-    {
-      id: '4',
-      name: 'Hashir',
-      age: 17,
-      location: 'Karachi',
-      bloodType: 'AB+',
-    },
-  ];
+  const [Donors, setDonors] = useState(null);
+
+  useEffect(async () => {
+    await Axios.get('http://192.168.10.113:4000/api/users/donate').then(
+      ({data}) => {
+        setDonors(data);
+      },
+    );
+  }, [Axios, setDonors]);
 
   return (
     <SafeAreaView>
@@ -50,19 +30,40 @@ const NearByDonors = () => {
         <Text style={Styles.bloodbankHeading}>Near by Donors</Text>
       </View>
       <View>
-        <FlatList
-          data={Donors}
-          renderItem={({item}) => {
-            return (
-              <View key={item.id} style={Styles.banksItems}>
-                <Text style={Styles.bankNameText}>{item.name}</Text>
-                <Text style={Styles.bankNameLocation}>{item.age}</Text>
-                <Text style={Styles.bankNameLocation}>{item.location}</Text>
-                <Text style={Styles.bankNameLocation}>{item.bloodType}</Text>
-              </View>
-            );
-          }}
-        />
+        {Donors !== null ? (
+          <FlatList
+            data={Donors}
+            renderItem={({item}) => {
+              return (
+                <TouchableOpacity
+                  key={item._id}
+                  activeOpacity={0.6}
+                  style={Styles.banksItems}>
+                  <View style={Styles.donateSections}>
+                    <Text style={Styles.bankNameText}>Name: {item.name}</Text>
+                    <Text style={Styles.bankNameLocation}>Age: {item.age}</Text>
+                  </View>
+                  <View style={Styles.donateSections}>
+                    <Text style={Styles.bankNameLocation}>
+                      Country: {item.country}
+                    </Text>
+                    <Text style={Styles.bankNameLocation}>
+                      City: {item.city}
+                    </Text>
+                  </View>
+                  <View style={Styles.donateSections}>
+                    <Text style={Styles.bankNameLocation}>
+                      Address: {item.address}
+                    </Text>
+                    <Text style={Styles.bankNameLocation}>
+                      Blood Group: {item.bloodtype}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -84,11 +85,17 @@ const Styles = StyleSheet.create({
   },
   bankNameText: {
     color: '#fff',
-    fontSize: 20,
     fontWeight: 'bold',
   },
   bankNameLocation: {
     color: '#fff',
+  },
+  donateSections: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    alignContent: 'space-between',
+    marginVertical: 2,
   },
 });
 

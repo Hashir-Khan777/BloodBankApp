@@ -16,8 +16,8 @@ const RegisterUsers = (name, number, email, password) => async (dispatch) => {
         password: password,
       },
     );
-    dispatch({type: 'USER_REGISTER_SUCCESS', payload: data});
     await AsyncStorage.setItem('user', JSON.stringify(data));
+    dispatch({type: 'USER_REGISTER_SUCCESS', payload: data});
   } catch (err) {
     dispatch({
       type: 'USER_REGISTER_FAIL',
@@ -42,10 +42,8 @@ const SigninUsers = (email, password) => async (dispatch) => {
         password: password,
       },
     );
+    await AsyncStorage.setItem('user', JSON.stringify(data));
     dispatch({type: 'USER_SIGNIN_SUCESS', payload: data});
-    await AsyncStorage.setItem('user', JSON.stringify(data), async () => {
-      await AsyncStorage.mergeItem('user', JSON.stringify(data));
-    });
   } catch (err) {
     dispatch({
       type: 'USER_SIGNIN_FAIL',
@@ -58,6 +56,7 @@ const SigninUsers = (email, password) => async (dispatch) => {
 };
 
 const UsersDonations = (
+  name,
   age,
   country,
   city,
@@ -67,12 +66,13 @@ const UsersDonations = (
 ) => async (dispatch) => {
   dispatch({
     type: 'USER_DONATION_REQUEST',
-    payload: {age, country, city, address, postalcode, bloodtype},
+    payload: {name, age, country, city, address, postalcode, bloodtype},
   });
   try {
     const {data} = await axios.post(
       'http://192.168.10.113:4000/api/users/donate',
       {
+        name: name,
         age: age,
         country: country,
         city: city,
@@ -81,10 +81,8 @@ const UsersDonations = (
         bloodtype: bloodtype,
       },
     );
+    await AsyncStorage.setItem('donation', JSON.stringify(data));
     dispatch({type: 'USER_DONATION_SUCCESS', payload: data});
-    await AsyncStorage.setItem('donation', JSON.stringify(data), async () => {
-      await AsyncStorage.mergeItem('donation', JSON.stringify(data));
-    });
   } catch (err) {
     dispatch({
       type: 'USER_DONATION_FAIL',
