@@ -12,6 +12,7 @@ import {
 import {useDeviceOrientation} from '@react-native-community/hooks';
 import {useDispatch, useSelector} from 'react-redux';
 import {RegisterUsers} from '../store/action/UserAction';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Register = (props) => {
   const [name, setName] = useState();
@@ -22,16 +23,27 @@ const Register = (props) => {
 
   const dispatch = useDispatch();
 
+  const redirect = 'Home';
+
   const RegisterReducer = useSelector((state) => state.RegisterReducer);
-  const {registerUsers, loading, error} = RegisterReducer;
+  const {loading, error} = RegisterReducer;
 
   const registered = () => {
     dispatch(RegisterUsers(name, number, email, password));
     if (error) {
       setFieldError(error);
+      setTimeout(setFieldError, 3000);
+    } else {
+      props.navigation.navigate(redirect);
     }
-    setTimeout(setFieldError, 3000);
   };
+
+  useEffect(async () => {
+    const data = await AsyncStorage.getItem('user');
+    if (data !== null) {
+      props.navigation.navigate(redirect);
+    }
+  }, [AsyncStorage, redirect, props.navigation]);
 
   return (
     <>

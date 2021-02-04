@@ -15,7 +15,6 @@ const Donations = (props) => {
   const [donationArray, setDonationArray] = useState(null);
 
   useEffect(async () => {
-    await AsyncStorage.clear();
     const data = await AsyncStorage.getItem('donation');
     data !== null && setDonationArray([JSON.parse(data)]);
   }, [AsyncStorage, setDonationArray]);

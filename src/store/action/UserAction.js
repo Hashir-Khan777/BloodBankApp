@@ -18,6 +18,7 @@ const RegisterUsers = (name, number, email, password) => async (dispatch) => {
     );
     await AsyncStorage.setItem('user', JSON.stringify(data));
     dispatch({type: 'USER_REGISTER_SUCCESS', payload: data});
+    dispatch({type: 'USER_SIGNIN_SUCESS', payload: data});
   } catch (err) {
     dispatch({
       type: 'USER_REGISTER_FAIL',

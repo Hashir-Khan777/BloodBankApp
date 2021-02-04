@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,8 @@ const Signin = (props) => {
 
   const dispatch = useDispatch();
 
+  const redirect = 'Home';
+
   const RegisterReducer = useSelector((state) => state.RegisterReducer);
   const {loading, error} = RegisterReducer;
 
@@ -27,9 +29,18 @@ const Signin = (props) => {
     dispatch(SigninUsers(email, password));
     if (error) {
       setFieldError(error);
+      setTimeout(setFieldError, 3000);
+    } else {
+      props.navigation.navigate('Home');
     }
-    setTimeout(setFieldError, 3000);
   };
+
+  useEffect(async () => {
+    const data = await AsyncStorage.getItem('user');
+    if (data !== null) {
+      props.navigation.navigate(redirect);
+    }
+  }, [AsyncStorage, redirect, props.navigation]);
 
   return (
     <>

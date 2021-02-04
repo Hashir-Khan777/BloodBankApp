@@ -9,7 +9,7 @@ import NearByDonors from '../screens/NearByDonors';
 const Stack = createStackNavigator();
 const StackNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Register">
       <Stack.Screen
         name="Register"
         component={Register}
