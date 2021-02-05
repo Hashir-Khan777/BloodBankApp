@@ -3,22 +3,25 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  TextInput,
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
   FlatList,
 } from 'react-native';
 import Axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const NearByDonors = () => {
   const [Donors, setDonors] = useState(null);
 
   useEffect(async () => {
+    const user = await AsyncStorage.getItem('user');
     await Axios.get('http://192.168.10.113:4000/api/users/donate').then(
       ({data}) => {
         setDonors(data);
+        if (data._id == JSON.parse(user)._id) {
+          data.find((x) => x._id) !== Donors;
+        }
       },
     );
   }, [Axios, setDonors]);

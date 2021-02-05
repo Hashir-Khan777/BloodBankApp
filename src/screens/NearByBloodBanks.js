@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  TextInput,
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
@@ -46,12 +44,7 @@ const NearByBloodBanks = (props) => {
           data={BloodBanks}
           renderItem={({item}) => {
             return (
-              <TouchableOpacity
-                key={item.id}
-                activeOpacity={0.6}
-                onPress={() =>
-                  props.navigation.navigate(`BloodBanks${item.id}`)
-                }>
+              <TouchableOpacity key={item.id} activeOpacity={0.6}>
                 <View style={Styles.banksItems}>
                   <Text style={Styles.bankNameText}>{item.bank}</Text>
                   <Text style={Styles.bankNameLocation}>{item.location}</Text>
