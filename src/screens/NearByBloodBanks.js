@@ -1,4 +1,5 @@
-import React from 'react';
+import Axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,28 +11,15 @@ import {
 } from 'react-native';
 
 const NearByBloodBanks = (props) => {
-  const BloodBanks = [
-    {
-      id: '1',
-      bank: 'Saylani',
-      location: 'Karachi',
-    },
-    {
-      id: '2',
-      bank: 'Saylani',
-      location: 'Karachi',
-    },
-    {
-      id: '3',
-      bank: 'Saylani',
-      location: 'Karachi',
-    },
-    {
-      id: '4',
-      bank: 'Saylani',
-      location: 'Karachi',
-    },
-  ];
+  const [BloodBanks, setBloodBanks] = useState(null);
+
+  useEffect(async () => {
+    await Axios.get('http://192.168.10.113:4000/api/users/banks').then(
+      ({data}) => {
+        setBloodBanks(data);
+      },
+    );
+  }, [Axios, setBloodBanks]);
 
   return (
     <SafeAreaView>
@@ -40,19 +28,23 @@ const NearByBloodBanks = (props) => {
         <Text style={Styles.bloodbankHeading}>Near by Blood Banks</Text>
       </View>
       <View>
-        <FlatList
-          data={BloodBanks}
-          renderItem={({item}) => {
-            return (
-              <TouchableOpacity key={item.id} activeOpacity={0.6}>
-                <View style={Styles.banksItems}>
-                  <Text style={Styles.bankNameText}>{item.bank}</Text>
-                  <Text style={Styles.bankNameLocation}>{item.location}</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
+        {BloodBanks !== null ? (
+          <FlatList
+            data={BloodBanks}
+            renderItem={({item}) => {
+              return (
+                <TouchableOpacity key={item._id} activeOpacity={0.6}>
+                  <View style={Styles.banksItems}>
+                    <Text style={Styles.bankNameText}>{item.CompanyName}</Text>
+                    <Text style={Styles.bankNameLocation}>{item.address}</Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        ) : (
+          <Text>There are no blood banks registered</Text>
+        )}
       </View>
     </SafeAreaView>
   );

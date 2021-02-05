@@ -3,6 +3,7 @@ const expressAsyncHandler = require('express-async-handler');
 const User = require('../models/UserModel.js');
 const Donate = require('../models/DonateModel.js');
 const generateToken = require('../utils.js');
+const Bank = require('../models/BankModel.js');
 
 const userRouter = express.Router();
 
@@ -86,6 +87,14 @@ userRouter.get(
   expressAsyncHandler(async (req, res) => {
     const created_donations = await Donate.find({});
     res.send(created_donations);
+  }),
+);
+
+userRouter.get(
+  '/banks',
+  expressAsyncHandler(async (req, res) => {
+    const registerded_banks = await Bank.find({});
+    res.send(registerded_banks);
   }),
 );
 
