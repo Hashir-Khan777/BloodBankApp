@@ -20,7 +20,7 @@ const NearByDonors = () => {
       ({data}) => {
         setDonors(data);
         if (data._id == JSON.parse(user)._id) {
-          data.find((x) => x._id) !== Donors;
+          data.filter((x) => x._id !== Donors);
         }
       },
     );
