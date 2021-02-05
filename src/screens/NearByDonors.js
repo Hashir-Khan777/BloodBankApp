@@ -19,11 +19,16 @@ const NearByDonors = () => {
     await Axios.get('http://192.168.10.113:4000/api/users/donate').then(
       ({data}) => {
         setDonors(data);
-        if (data._id == JSON.parse(user)._id) {
-          data.filter((x) => x._id !== Donors);
+        if (user !== null) {
+          if (data._id == JSON.parse(user)._id) {
+            data.filter((x) => x._id !== Donors);
+          }
         }
       },
     );
+    return () => {
+      //
+    };
   }, [Axios, setDonors]);
 
   return (

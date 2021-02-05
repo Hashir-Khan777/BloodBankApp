@@ -10,15 +10,19 @@ import {
   FlatList,
 } from 'react-native';
 
-const NearByBloodBanks = (props) => {
+const NearByBloodBanks = () => {
   const [BloodBanks, setBloodBanks] = useState(null);
 
   useEffect(async () => {
     await Axios.get('http://192.168.10.113:4000/api/users/banks').then(
       ({data}) => {
         setBloodBanks(data);
+        console.log(BloodBanks);
       },
     );
+    return () => {
+      //
+    };
   }, [Axios, setBloodBanks]);
 
   return (

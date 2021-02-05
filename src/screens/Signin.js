@@ -34,6 +34,9 @@ const Signin = (props) => {
     } else {
       props.navigation.navigate('Home');
     }
+    return () => {
+      // 
+    }
   };
 
   useEffect(async () => {

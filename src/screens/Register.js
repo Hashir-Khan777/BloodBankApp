@@ -43,6 +43,9 @@ const Register = (props) => {
     if (data !== null) {
       props.navigation.navigate(redirect);
     }
+    return () => {
+      // 
+    }
   }, [AsyncStorage, redirect, props.navigation]);
 
   return (
